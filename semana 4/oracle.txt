@@ -1,0 +1,77 @@
+select replace(replace(case
+                         when fila = 1 then
+                          'CREATE TABLE ' || tabla || ' (' || columna
+                         else
+                          '                        ' || columna
+                       end,
+                       'VARCHAR2',
+                       'VARCHAR'),
+               'NUMBER',
+               'NUMERIC') statment_table
+  from (select o.owner || '.' || c.table_name tabla,
+               c.column_name || ' ' || c.data_type || ' (' || c.data_length || '),' columna,
+               row_number() OVER(PARTITION BY c.table_name ORDER BY rownum) fila
+          from dba_tab_cols c
+         inner join dba_objects o
+            on c.owner = o.owner
+           and c.table_name = o.object_name
+         where o.owner = 'NORTHWIND'
+           and o.object_type = 'TABLE')
+
+           
+Resultados 
+
+CREATE TABLE NORTHWIND.CATEGORIES (CATEGORY_ID NUMERIC (22),
+                        CATEGORY_NAME VARCHAR (15),
+                        DESCRIPTION VARCHAR (2000),
+                        PICTURE VARCHAR (255),
+                        
+CREATE TABLE NORTHWIND.CUSTOMERS (CUSTOMER_ID NUMERIC (22),
+                        CUSTOMER_CODE VARCHAR (5),
+                        COMPANY_NAME VARCHAR (40),
+                        CONTACT_NAME VARCHAR (30),
+                        CONTACT_TITLE VARCHAR (30),
+                        ADDRESS VARCHAR (60),
+                        CITY VARCHAR (15),
+                        REGION VARCHAR (15),
+                        POSTAL_CODE VARCHAR (10),
+                        COUNTRY VARCHAR (15),
+                        PHONE VARCHAR (24),
+                        FAX VARCHAR (24),
+                        
+CREATE TABLE NORTHWIND.EMPLOYEES (EMPLOYEE_ID NUMERIC (22),
+                        LASTNAME VARCHAR (20),
+                        FIRSTNAME VARCHAR (10),
+                        TITLE VARCHAR (30),
+                        TITLE_OF_COURTESY VARCHAR (25),
+                        BIRTHDATE DATE (7),
+                        HIREDATE DATE (7),
+                        ADDRESS VARCHAR (60),
+                        CITY VARCHAR (15),
+                        REGION VARCHAR (15),
+                        POSTAL_CODE VARCHAR (10),
+                        COUNTRY VARCHAR (15),
+                        HOME_PHONE VARCHAR (24),
+                        EXTENSION VARCHAR (4),
+                        PHOTO VARCHAR (255),
+                        NOTES VARCHAR (2000),
+                        REPORTS_TO NUMERIC (22),
+                        
+CREATE TABLE NORTHWIND.ORDER_DETAILS (ORDER_ID NUMERIC (22),
+                        PRODUCT_ID NUMERIC (22),
+                        UNIT_PRICE NUMERIC (22),
+                        QUANTITY NUMERIC (22),
+                        DISCOUNT NUMERIC (22),
+                        
+CREATE TABLE NORTHWIND.ORDERS (ORDER_ID NUMERIC (22),
+                        CUSTOMER_ID NUMERIC (22),
+                        EMPLOYEE_ID NUMERIC (22),
+                        ORDER_DATE DATE (7),
+                        REQUIRED_DATE DATE (7),
+                        SHIPPED_DATE DATE (7),
+                        SHIP_VIA NUMERIC (22),
+                        FREIGHT NUMERIC (22),
+                        SHIP_NAME VARCHAR (40),
+                        SHIP_ADDRESS VARCHAR (60),
+                        SHIP_CITY VARCHAR (15),
+                        SHIP_REGION VARCHAR (15),
